@@ -1,6 +1,6 @@
 # ✈️ Travel Assistant AI Agent
 
-A conversational AI travel assistant that helps with **weather**, **places of interest**, and **trip planning**. It uses OpenAI for reasoning and calls external APIs for real-time weather (OpenWeatherMap) and places (OpenStreetMap / Overpass).
+A conversational AI travel assistant that helps with **trip planning**. It uses OpenAI and calls external APIs for real-time weather (OpenWeatherMap) and places (OpenStreetMap / Overpass).
 
 ## Features
 
@@ -8,7 +8,6 @@ A conversational AI travel assistant that helps with **weather**, **places of in
 - **Places** — Restaurants, museums, and parks via OpenStreetMap (Overpass API)
 - **Trip planning** — Combines weather + places with LLM-generated suggestions (sights, activities, itineraries)
 - **User preferences** — On first run, the assistant asks for your travel preferences (e.g. diet, nightlife, activities); these are saved in a local `user_preferences.txt` and used to personalize recommendations in every session
-- **Two interfaces** — Terminal REPL or Streamlit web UI
 
 ## Quick Start
 
@@ -29,16 +28,8 @@ OPENAI_API_KEY=your_openai_api_key
 OPENWEATHER_API_KEY=your_openweather_api_key
 ```
 
-- **OpenAI**: [API keys](https://platform.openai.com/api-keys) (required)
-- **OpenWeatherMap**: [Sign up](https://openweathermap.org/api) for a free API key (required for weather; places work without it)
-
 ### 3. Run
 
-**Terminal (REPL):**
-
-```bash
-python main.py
-```
 
 **Web UI (Streamlit):**
 
