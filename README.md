@@ -7,6 +7,7 @@ A conversational AI travel assistant that helps with **weather**, **places of in
 - **Weather** — Current temperature and 5-day forecasts for any city
 - **Places** — Restaurants, museums, and parks via OpenStreetMap (Overpass API)
 - **Trip planning** — Combines weather + places with LLM-generated suggestions (sights, activities, itineraries)
+- **User preferences** — On first run, the assistant asks for your travel preferences (e.g. diet, nightlife, activities); these are saved in a local `user_preferences.txt` and used to personalize recommendations in every session
 - **Two interfaces** — Terminal REPL or Streamlit web UI
 
 ## Quick Start
@@ -45,6 +46,8 @@ python main.py
 streamlit run streamlit_app.py
 ```
 
+On first run (or if `user_preferences.txt` is missing or empty), the assistant will ask for your traveling preferences so it can plan trips better. Your reply is saved locally and reused in future sessions.
+
 ## Example prompts
 
 - *"What's the weather in Paris this week?"*
@@ -62,6 +65,8 @@ streamlit run streamlit_app.py
 | `tools.py` | Tool implementations (weather, places) and registry |
 | `prompts.py` | System prompt and plan/execute scaffolding |
 | `config.py` | Loads `.env` and API URLs/constants |
+| `preferences.py` | Load/save user travel preferences to a local `.txt` file |
+| `user_preferences.txt` | Your saved preferences (created on first run; optional `USER_PREFERENCES_PATH` in `.env` to override path) |
 
 ## Requirements
 
