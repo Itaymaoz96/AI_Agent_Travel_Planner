@@ -7,7 +7,13 @@ from openai import OpenAI
 
 from assistant import OpenAILLMClient, run_assistant
 from config import OPENAI_API_KEY, OPENWEATHER_API_KEY
+from preferences import load_user_preferences, save_user_preferences
 from tools import tool_registry
+
+PREFERENCES_PROMPT = (
+    "Tell me your traveling preferences (e.g. are you vegetarian? do you like nightlife?) "
+    "so I can plan your trip better."
+)
 
 
 def main():
@@ -18,9 +24,21 @@ def main():
     client = OpenAI(api_key=OPENAI_API_KEY)
     llm = OpenAILLMClient(client)
 
-    print("Hi! I'm your travel assistant. I can help you with weather, places of interest etc.(type 'quit' or 'exit' to stop)\n")
+    print("Hi! I'm your travel assistant. I can help you with weather, places of interest etc. (type 'quit' or 'exit' to stop)\n")
     if not OPENWEATHER_API_KEY:
         print("Note: OPENWEATHER_API_KEY not set in .env — weather queries will fail.\n")
+
+    user_preferences = load_user_preferences()
+    if not user_preferences:
+        print(f"Assistant: {PREFERENCES_PROMPT}")
+        try:
+            prefs_input = input("You: ").strip()
+        except (EOFError, KeyboardInterrupt):
+            prefs_input = ""
+        if prefs_input:
+            save_user_preferences(prefs_input)
+            user_preferences = prefs_input
+        print()
 
     conversation_history: list = []
 
@@ -40,7 +58,9 @@ def main():
 
         streamed_response = False
         streamed_plan = False
-        for event in run_assistant(conversation_history, user_input, llm, tool_registry):
+        for event in run_assistant(
+            conversation_history, user_input, llm, tool_registry, user_preferences=user_preferences
+        ):
             kind = event[0]
             if kind == "plan_delta":
                 chunk = event[1]

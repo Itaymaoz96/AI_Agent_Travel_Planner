@@ -8,12 +8,36 @@ from openai import OpenAI
 
 from assistant import OpenAILLMClient, run_assistant
 from config import OPENAI_API_KEY, OPENWEATHER_API_KEY
+from preferences import load_user_preferences, save_user_preferences
 from tools import tool_registry
+
+PREFERENCES_PROMPT = (
+    "Tell me your traveling preferences (e.g. are you vegetarian? do you like nightlife?) "
+    "so I can plan your trip better."
+)
 
 st.set_page_config(page_title="Travel Assistant", page_icon="✈️", layout="centered")
 
 if not OPENAI_API_KEY:
     st.error("OPENAI_API_KEY is not set in .env")
+    st.stop()
+
+user_preferences = load_user_preferences()
+if not user_preferences:
+    st.title("Travel Assistant")
+    st.markdown(f"**{PREFERENCES_PROMPT}**")
+    with st.form("preferences_form"):
+        prefs_input = st.text_area(
+            "Your preferences",
+            placeholder="e.g. I'm vegetarian, I love nightlife and live music, prefer walking over tours",
+            label_visibility="collapsed",
+        )
+        if st.form_submit_button("Save and start"):
+            if prefs_input and prefs_input.strip():
+                save_user_preferences(prefs_input.strip())
+                st.rerun()
+            else:
+                st.warning("Please enter at least something so I can personalize your trip.")
     st.stop()
 
 if "display_messages" not in st.session_state:
@@ -67,6 +91,7 @@ if prompt:
             prompt,
             llm,
             tool_registry,
+            user_preferences=user_preferences,
         ):
             kind = event[0]
             if kind == "plan_delta":

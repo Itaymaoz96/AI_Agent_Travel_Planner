@@ -223,12 +223,18 @@ def run_assistant(
     user_message: str,
     llm: LLMClient,
     tool_registry: Any,
+    user_preferences: str | None = None,
 ):
     """
     Process user message with the assistant (plan-and-execute).
     Yields ("plan", plan_text), ("plan_delta", chunk), ("delta", text), ("result", ...).
+    If user_preferences is non-empty, it is injected into the system message for personalized trip planning.
     """
     messages = ensure_system_message(conversation_history)
+    if user_preferences and user_preferences.strip():
+        pref_block = "\n\nUser's travel preferences (use these to personalize recommendations and itineraries):\n" + user_preferences.strip()
+        if messages and messages[0].get("role") == "system":
+            messages[0] = {"role": "system", "content": messages[0]["content"] + pref_block}
     messages.append({"role": "user", "content": user_message})
 
     tools = tool_registry.get_schemas()

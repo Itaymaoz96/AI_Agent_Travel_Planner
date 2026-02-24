@@ -3,6 +3,9 @@
 .env.local
 *.env
 
+# Local user preferences (optional: remove if you want to commit them)
+user_preferences.txt
+
 # Python
 __pycache__/
 *.py[cod]
