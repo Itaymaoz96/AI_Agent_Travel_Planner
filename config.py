@@ -20,7 +20,7 @@ OPENWEATHER_FORECAST_URL = "https://api.openweathermap.org/data/2.5/forecast"
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
 OVERPASS_URL = "https://overpass-api.de/api/interpreter"
 REQUEST_HEADERS = {"User-Agent": "AssistantApp/1.0 (travel assistant; python)"}
-
+    
 # Overpass API: only these three categories (other POIs/attractions are LLM-generated)
 PLACE_CATEGORIES = {
     "restaurant": '["amenity"~"restaurant|fast_food"]',
